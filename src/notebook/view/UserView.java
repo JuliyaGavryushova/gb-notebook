@@ -51,6 +51,9 @@ public class UserView {
                     String lstName = prompt("Фамилия: ");
                     String phn = prompt("Номер телефона: ");
                     userController.updateUser(userId, userController.createUser(frstName, lstName, phn));
+                case DELETE:
+                    String usId = prompt("Enter user id: ");
+                    userController.deleteUser(usId);
             }
         }
     }

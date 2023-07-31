@@ -1,6 +1,5 @@
 package notebook.model.repository.impl;
 
-import notebook.model.dao.impl.FileOperation;
 import notebook.util.mapper.impl.UserMapper;
 import notebook.model.User;
 import notebook.model.repository.GBRepository;
@@ -103,7 +102,14 @@ public class UserRepository implements GBRepository {
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        List<User> users = findAll();
+        boolean delUser = users.removeIf(u -> u.getId().equals(id));
+        if (delUser) {
+            write(users);
+        } else {
+            throw new RuntimeException("User not found");
+        }
+        return delUser;
     }
 
     @Override
