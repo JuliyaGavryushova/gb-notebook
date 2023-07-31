@@ -4,6 +4,8 @@ import notebook.controller.UserController;
 import notebook.model.User;
 import notebook.util.Commands;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class UserView {
@@ -13,7 +15,7 @@ public class UserView {
         this.userController = userController;
     }
 
-    public void run(){
+    public void run() {
         Commands com;
 
         while (true) {
@@ -21,8 +23,16 @@ public class UserView {
             com = Commands.valueOf(command);
             if (com == Commands.EXIT) return;
             switch (com) {
+                case LIST:
+                    List<User> users = userController.readAll();
+                    System.out.println(users);
+                    break;
                 case CREATE:
-                    User u = createUser();
+                    String firstName = prompt("Имя: ");
+                    String lastName = prompt("Фамилия: ");
+                    String phone = prompt("Номер телефона: ");
+                    User u = userController.createUser(firstName, lastName, phone);
+//                    User u = createUser();
                     userController.saveUser(u);
                     break;
                 case READ:
@@ -37,7 +47,10 @@ public class UserView {
                     break;
                 case UPDATE:
                     String userId = prompt("Enter user id: ");
-                    userController.updateUser(userId, createUser());
+                    String frstName = prompt("Имя: ");
+                    String lstName = prompt("Фамилия: ");
+                    String phn = prompt("Номер телефона: ");
+                    userController.updateUser(userId, userController.createUser(frstName, lstName, phn));
             }
         }
     }
@@ -48,10 +61,10 @@ public class UserView {
         return in.nextLine();
     }
 
-    private User createUser() {
-        String firstName = prompt("Имя: ");
-        String lastName = prompt("Фамилия: ");
-        String phone = prompt("Номер телефона: ");
-        return new User(firstName, lastName, phone);
-    }
+//    private User createUser() {
+//        String firstName = prompt("Имя: ");
+//        String lastName = prompt("Фамилия: ");
+//        String phone = prompt("Номер телефона: ");
+//        return new User(firstName, lastName, phone);
+//    }
 }

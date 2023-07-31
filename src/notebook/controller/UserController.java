@@ -32,4 +32,12 @@ public class UserController {
         update.setId(Long.parseLong(userId));
         repository.update(Long.parseLong(userId), update);
     }
+
+    public List<User> readAll() {
+        return repository.findAll();
+    }
+
+    public User createUser(String firstName, String lastName, String phone) {
+        return new User(firstName, lastName, phone);
+    }
 }

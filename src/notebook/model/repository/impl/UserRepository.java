@@ -12,6 +12,7 @@ import java.util.Optional;
 public class UserRepository implements GBRepository {
     private final UserMapper mapper;
     private final FileOperation operation;
+//    private final String fileName;
 
     public UserRepository(FileOperation operation) {
         this.mapper = new UserMapper();
@@ -34,7 +35,7 @@ public class UserRepository implements GBRepository {
         long max = 0L;
         for (User u : users) {
             long id = u.getId();
-            if (max < id){
+            if (max < id) {
                 max = id;
             }
         }
@@ -57,9 +58,12 @@ public class UserRepository implements GBRepository {
                 .filter(u -> u.getId()
                         .equals(userId))
                 .findFirst().orElseThrow(() -> new RuntimeException("User not found"));
-        editUser.setFirstName(update.getFirstName());
-        editUser.setLastName(update.getLastName());
-        editUser.setPhone(update.getPhone());
+        editUser.setFirstName(update.getFirstName().isEmpty() ? editUser.getFirstName() : update.getFirstName());
+        editUser.setLastName(update.getLastName().isEmpty() ? editUser.getLastName() : update.getLastName());
+        editUser.setPhone(update.getPhone().isEmpty() ? editUser.getPhone() : update.getPhone());
+//        editUser.setFirstName(update.getFirstName());
+//        editUser.setLastName(update.getLastName());
+//        editUser.setPhone(update.getPhone());
         write(users);
         return Optional.of(update);
     }
@@ -71,7 +75,7 @@ public class UserRepository implements GBRepository {
 
     private void write(List<User> users) {
         List<String> lines = new ArrayList<>();
-        for (User u: users) {
+        for (User u : users) {
             lines.add(mapper.toInput(u));
         }
         operation.saveAll(lines);
